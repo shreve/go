@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'json'
+require 'fileutils'
 
 class Generator
   def initialize(db)
@@ -23,14 +24,9 @@ class Generator
   end
 
   def generate_index
-    template = File.read(File.join(template_path, 'index.html'))
-
-    links = @db.map do |code, url|
-      "<li><a href=\"#{url}\">#{code} -- #{url}</a></li>"
-    end.join
-
-    File.open(File.join(output_path, 'index.html'), 'w+') do |file|
-      file.write template.gsub('{{links}}', links)
+    path = File.join(output_path, 'this.html')
+    if File.exist?(path)
+      FileUtils.copy(path, File.join(output_path, 'index.html'))
     end
   end
 

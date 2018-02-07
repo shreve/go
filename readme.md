@@ -29,4 +29,4 @@ values are the destination.
 the standard library, and should be compatible with versions as old as 1.8. It
 has only been tested on versions above 2.2.
 
-The root of the domain is handled by `templates/index.html`.
+The root of the domain will be handled by the link with path `this`.
