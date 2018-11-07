@@ -20,6 +20,10 @@ class Generator
       File.open(File.join(output_path, "#{code}.html"), 'w+') do |file|
         file.write template.gsub('{{url}}', url)
       end
+      Dir.mkdir File.join(output_path, code)
+      File.open(File.join(output_path, code, "index.html"), 'w+') do |file|
+        file.write template.gsub('{{url}}', url)
+      end
     end
   end
 
