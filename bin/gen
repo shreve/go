@@ -9,8 +9,13 @@ class Generator
   end
 
   def generate
+    clean_directory
     generate_links
     generate_index
+  end
+
+  def clean_directory
+    files_to_clean.each { |file| FileUtils.rm_rf(file) }
   end
 
   def generate_links
@@ -35,6 +40,14 @@ class Generator
   end
 
   private
+
+  def protected_files
+    %w[CNAME].map { |name| File.join(output_path, name) }
+  end
+
+  def files_to_clean
+    Dir.glob(output_path + '/*') - protected_files
+  end
 
   def output_path
     File.expand_path('./docs')
