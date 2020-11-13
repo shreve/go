@@ -6,11 +6,13 @@ require 'fileutils'
 class Generator
   def initialize(db)
     @db = db
+    @host = File.read(File.join(output_path, 'CNAME')).strip
   end
 
   def generate
     clean_directory
     generate_links
+    generate_go_imports
     generate_index
   end
 
@@ -21,7 +23,7 @@ class Generator
   def generate_links
     template = File.read(File.join(template_path, 'link.html'))
 
-    @db.each_pair do |code, url|
+    @db["links"].each_pair do |code, url|
       File.open(File.join(output_path, "#{code}.html"), 'w+') do |file|
         file.write template.gsub('{{url}}', url)
       end
@@ -29,6 +31,21 @@ class Generator
       File.open(File.join(output_path, code, "index.html"), 'w+') do |file|
         file.write template.gsub('{{url}}', url)
       end
+    end
+  end
+
+  def generate_go_imports
+    template = File.read(File.join(template_path, 'go-import.html'))
+
+    @db["go-imports"].each_pair do |code, url|
+      body = template
+        .gsub('{{url}}', url)
+        .gsub('{{code}}', code)
+        .gsub('{{host}}', @host)
+
+      File.write(File.join(output_path, "#{code}.html"), body, mode: 'w+')
+      Dir.mkdir File.join(output_path, code) rescue nil
+      File.write(File.join(output_path, code, "index.html"), body, mode: 'w+')
     end
   end
 
@@ -58,7 +75,7 @@ class Generator
   end
 end
 
-database = File.read(File.join(File.expand_path('./'), 'links.json'))
+database = File.read(File.join(File.expand_path('./'), 'db.json'))
 database = JSON.parse(database)
 
 Generator.new(database).generate

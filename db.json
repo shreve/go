@@ -1,0 +1,13 @@
+{
+  "links":
+  {
+    "this": "https://github.com/shreve/go",
+    "water": "https://www.paymentservicenetwork.com/Login.aspx?acc=CP17028"
+  },
+  "go-imports":
+  {
+    "tui": "https://github.com/shreve/tui",
+    "musicwand": "https://github.com/shreve/musicwand",
+    "go-roku": "https://github.com/shreve/go-roku"
+  }
+}
